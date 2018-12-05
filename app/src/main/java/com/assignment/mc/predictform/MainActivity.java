@@ -46,7 +46,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements Gota.OnRequestPermissionsBack{
 
@@ -224,40 +226,44 @@ public class MainActivity extends AppCompatActivity implements Gota.OnRequestPer
         @Override
         protected Void doInBackground(String... params) {
 //            LibSVM.getInstance().predict(TextUtils.join(" ", params));
+                Map<String, Float> decisionValue = new HashMap<>();
                 try (CSVReader csvReader = new CSVReader(new FileReader(uri.getPath()))) {
                     String[] nextLine;
                     csvReader.readNext();
+                    int count = 1;
+
                     while ((nextLine = csvReader.readNext()) != null) {
-                        float x1 = Float.valueOf(nextLine[3]);
-                        float x2 = Float.valueOf(nextLine[4]);
-                        float x3 = Float.valueOf(nextLine[6]);
-                        float x4 = Float.valueOf(nextLine[7]);
-                        float x5 = Float.valueOf(nextLine[9]);
-                        float x6 = Float.valueOf(nextLine[10]);
-                        float x7 = Float.valueOf(nextLine[12]);
-                        float x8 = Float.valueOf(nextLine[13]);
-                        float x9 = Float.valueOf(nextLine[15]);
-                        float x10 = Float.valueOf(nextLine[16]);
-                        float x11 = Float.valueOf(nextLine[18]);
-                        float x12 = Float.valueOf(nextLine[19]);
-                        float x13 = Float.valueOf(nextLine[21]);
-                        float x14 = Float.valueOf(nextLine[22]);
-                        float x15 = Float.valueOf(nextLine[24]);
-                        float x16 = Float.valueOf(nextLine[25]);
-                        float x17 = Float.valueOf(nextLine[27]);
-                        float x18 = Float.valueOf(nextLine[28]);
-                        float x19 = Float.valueOf(nextLine[30]);
-                        float x20 = Float.valueOf(nextLine[31]);
-                        float x21 = Float.valueOf(nextLine[33]);
-                        float x22 = Float.valueOf(nextLine[34]);
-//                        Decision Tree Algorithm here
-                        Log.d(TAG, "doInBackground: "+x7);
-                        System.out.println(nextLine[0] + nextLine[1] + "etc...");
+                        decisionValue.put("x1", Float.valueOf(nextLine[3]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x2", Float.valueOf(nextLine[4]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x3", Float.valueOf(nextLine[6]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x4", Float.valueOf(nextLine[7]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x5", Float.valueOf(nextLine[9]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x6", Float.valueOf(nextLine[10]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x7", Float.valueOf(nextLine[12]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x8", Float.valueOf(nextLine[13]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x9", Float.valueOf(nextLine[15]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x10", Float.valueOf(nextLine[16]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x11", Float.valueOf(nextLine[18]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x12", Float.valueOf(nextLine[19]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x13", Float.valueOf(nextLine[21]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x14", Float.valueOf(nextLine[22]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x15", Float.valueOf(nextLine[24]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x16", Float.valueOf(nextLine[25]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x17", Float.valueOf(nextLine[27]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x18", Float.valueOf(nextLine[28]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x19", Float.valueOf(nextLine[30]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x20", Float.valueOf(nextLine[31]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x21", Float.valueOf(nextLine[33]) + decisionValue.getOrDefault("x1", 0.0f));
+                        decisionValue.put("x22", Float.valueOf(nextLine[34]) + decisionValue.getOrDefault("x1", 0.0f));
+                        count+=1;
+                    }
+                    for (String key : decisionValue.keySet()) {
+                        decisionValue.put(key, decisionValue.get(key) / count);
                     }
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-
+            Log.d(TAG, "doInBackground: "+decisionValue);
             return null;
         }
         @Override
