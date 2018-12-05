@@ -89,19 +89,6 @@ public class MainActivity extends AppCompatActivity implements Gota.OnRequestPer
                 Result.setText(readCSV());
             }
         });
-
-        // create assets folder if it doesn't exist
-        createAssetsFolder();
-
-        // copy all data files from assets to external storage
-        try {
-            String[] list = getAssets().list("data");
-            for (String file : list) {
-                copyToExternalStorage(file, "data");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -146,61 +133,6 @@ public class MainActivity extends AppCompatActivity implements Gota.OnRequestPer
             return false;
         }
     }
-
-    private void createAssetsFolder() {
-        // create app assets folder if not created
-        File folder = new File(appFolderPath);
-
-        if (!folder.exists()) {
-            Log.d(TAG, "Assignment folder not found");
-            folder.mkdirs();
-        } else {
-            Log.w(TAG, "INFO: Assign folder already exists.");
-        }
-    }
-
-    private void copyToExternalStorage(String assetName, String assetsDirectory) {
-        String from = assetName;
-        String to = appFolderPath + from;
-
-        // check if the file exists
-        File file = new File(to);
-        if (file.exists()) {
-            Log.d(TAG, "copyToExternalStorage: file already exist, no need to copy: " + from);
-        } else {
-            // do copy
-            boolean copyResult = copyAsset(getAssets(), from, assetsDirectory, to);
-            Log.d(TAG, "copyToExternalStorage: isCopied -> " + copyResult);
-        }
-    }
-
-    private boolean copyAsset(AssetManager assetManager, String fromAssetPath, String assetsDirectory, String toPath) {
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
-        try {
-            inputStream = assetManager.open(assetsDirectory + "/" + fromAssetPath);
-            new File(toPath).createNewFile();
-            outputStream = new FileOutputStream(toPath);
-            copyFile(inputStream, outputStream);
-            inputStream.close();
-            outputStream.flush();
-            outputStream.close();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e(TAG, "copyAsset: unable to copy file: " + fromAssetPath);
-            return false;
-        }
-    }
-
-    private void copyFile(InputStream inputStream, OutputStream outputStream) throws IOException {
-        byte[] buffer = new byte[1024];
-        int read;
-        while ((read = inputStream.read(buffer)) != -1) {
-            outputStream.write(buffer, 0, read);
-        }
-    }
-
     public String getClassifierClass(Map<String, Float> x) {
         int var = -1;
         if (x.get("x22") < 163.439) {
